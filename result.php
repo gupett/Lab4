@@ -105,25 +105,59 @@
 	}
 
 	function sortObjects($array, $sortBy, $desc){
-		usort($array, "cmp");
+		switch ($sortBy) {
+			case 'lan':
+				usort($array, "cmp1");
+				break;
+			case 'objekttyp':
+				usort($array, "cmp2");
+				break;
+			case 'adress':
+				usort($array, "cmp3");
+				break;
+			case 'area':
+				usort($array, "cmp4");
+				break;
+			case 'rum':
+				usort($array, "cmp5");
+				break;
+			case 'pris':
+				usort($array, "cmp6");
+				break;
+			case 'avgift':
+				usort($array, "cmp7");
+				break;
+			default:
+				# code...
+				break;
+		}
+		if ($desc){
+			return array_reverse($array);
+		}
 		return $array;
 	}
 
-	function cmp($a, $b){
+	function cmp1($a, $b){
+	    return strcmp($a->lan, $b->lan);
+	}
+	function cmp2($a, $b){
+	    return strcmp($a->objekttyp, $b->objekttyp);
+	}
+	function cmp3($a, $b){
+	    return strcmp($a->adress, $b->adress);
+	}
+	function cmp4($a, $b){
+	    return strcmp($a->area, $b->area);
+	}
+	function cmp5($a, $b){
 	    return strcmp($a->rum, $b->rum);
 	}
-
-	function sortObjects2($array, $sortBy, $desc){
-		usort($array, build_sorter($sortBy));
-		return $array;
+	function cmp6($a, $b){
+	    return strcmp($a->pris, $b->pris);
 	}
-
-	function build_sorter($key) {
-    	return function ($a, $b) use ($key) {
-        	return strnatcmp($a->$key], $b->$key);
-        };
-    }
-}
+	function cmp7($a, $b){
+	    return strcmp($a->avgift, $b->avgift);
+	}
 
 ?>
 
@@ -137,8 +171,7 @@
  	
  	$vars = getVarsForForm();
  	$res = getTableForVariables($vars);
- 	$sortBy = "rum";
- 	$res = sortObjects2($res, $sortBy, $desc);
+ 	$res = sortObjects($res, $sortBy, $desc);
  	dump($res);
  ?>
 
