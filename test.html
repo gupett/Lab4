@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Hello Bulma!</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css">
+    <script defer src="https://use.fontawesome.com/releases/v5.0.0/js/all.js"></script>
+    <link rel="stylesheet" type="text/css" href="style.css">
+  </head>
+  <body>
+
+  <!-- top-->
+    <section class="hero is-primary">
+        <div class="hero-body">
+          <div class="containter">
+            <h1 class="title is-1">Bostäder</h1>
+              <h2 class="subtitle">Hitta ditt nya hem</h2>
+          </div>
+        </div>
+    </section>
+
+  <form class="search" action="result.php" method="post">
+
+    <div class="field">
+      <label class="label">Adress</label>
+      <div class="control">
+        <input class="input" type="text" name="adress" placeholder="Adress">
+      </div>
+    </div>
+
+    <div class="columns">
+      <div class="column">
+        <div class="field">
+          <label class="label">Stad</label>
+          <div class="control">
+            <div class="select">
+              <select>
+                <option>Stockholm</option>
+                <option>Uppsala</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="column is-three-quarters">
+        <div class="field">
+          <label class="label">Objekttyp</label>
+          <div class="control">
+            <input class="input" type="text" name="objekttyp" placeholder="Text input">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="label">Antal Rum</label>
+      <div class="field is-grouped">
+        <p class="control is-expanded">
+          <input class="input" type="text" name="minRum" placeholder="Min Rum">
+        </p>
+        <p class="control is-expanded">
+          <input class="input" type="text" name="maxRum" placeholder="Max Rum">
+        </p>
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="label">Area</label>
+      <div class="field is-grouped">
+        <p class="control is-expanded">
+          <input class="input" type="text" name="minArea" placeholder="Min Area">
+        </p>
+        <p class="control is-expanded">
+          <input class="input" type="text" name="maxArea" placeholder="Max Area">
+        </p>
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="label">Pris</label>
+      <div class="field is-grouped">
+        <p class="control is-expanded">
+          <input class="input" type="text" name="minPris" placeholder="Min Pris">
+        </p>
+        <p class="control is-expanded">
+          <input class="input" type="text" name="maxPris" placeholder="Max Pris">
+        </p>
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="label">Avgift</label>
+      <div class="field is-grouped">
+        <p class="control is-expanded">
+          <input class="input" type="text" name="minAvgift" placeholder="Min Avgift">
+        </p>
+        <p class="control is-expanded">
+          <input class="input" type="text" name="maxAvgift" placeholder="Max Avgift">
+        </p>
+      </div>
+    </div>
+
+    <div class="control">
+      <button class="button is-primary">Submit</button>
+    </div>
+
+  </form>
+
+  </body>
+</html
+
+
+
+
+
+<html>
+<head>
+  <title>Sök Bostad</title>
+</head>
+<body>
+  <?php 
+    dump($cities);
+    // Accessing one single instance of the array
+    $city = $cities[0]->lan;
+    echo "<br>".$city."<br>";
+    dump($info);
+  ?>
+  <form action="result.php", method="post">
+    Län: <input type="text" name="lan"><br>
+    Objekttyp: <input type="text" name="objekttyp"><br>
+    Adress: <input type="text" name="adress"><br>
+    Area: <input type="text" name="minArea"><input type="text" name="maxArea"><br>
+    Rum: <input type="text" name="minRum"><input type="text" name="maxRum"><br>
+    Pris: <input type="text" name="minPris"><input type="text" name="maxPris"><br>
+    Avgift: <input type="text" name="minAvgift"><input type="text" name="maxAvgift"><br>
+    <input type="hidden" name="sortBy" value="pris">
+    <input type="hidden" name="desc" value="false">
+    <input type="hidden" name="search" value="true">
+    <input type="submit">
+  </form>
+</body>
+</html>

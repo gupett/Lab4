@@ -8,23 +8,31 @@
 
 // MARK: Functions used for database interaction
 
+	function getDataOfLatestSearch($latestSearch){
+		$attributes = getFormSearchFields();
+		$vars = array();
+		foreach ($attributes as $value) {
+			if (array_key_exists($value, $latestSearch)){
+				array_push($vars, $latestSearch[$value]);
+				array_push($vars, false);
+			}else{
+				array_push($vars, false);
+				array_push($vars, true);
+			}
+		}
+
+		$sql = "SELECT * FROM bostader WHERE (lan=? OR ?) AND (objekttyp=? OR ?) AND (adress=? OR ?) AND (area > ? OR ?) AND (area < ? OR ?) AND (rum >= ? OR ?) AND (rum <= ? OR ?) AND (pris > ? OR ?) AND (pris < ? OR ?) AND (avgift > ? OR ?) AND (avgift < ? OR ?);";
+ 		$res = getTableForVariables($vars, $sql);
+
+		//$res = getDataForSearch($vars);
+		return $res;
+	}
+
 	function getCities(){
 		$sql = "SELECT DISTINCT lan FROM bostader;";
 		$vars = array();
 		$res = getTableForVariables($vars, $sql);
 		return $res;
-	}
-
-	function getDataForForm(){
-		$vars = getVarsForForm();
-		// Preparing the sql statement
-		$sql = "SELECT * FROM bostader WHERE (lan=? OR ?) AND (objekttyp=? OR ?) AND (adress=? OR ?) AND (area > ? OR ?) AND (area < ? OR ?) AND (rum > ? OR ?) AND (rum < ? OR ?) AND (pris > ? OR ?) AND (pris < ? OR ?) AND (avgift > ? OR ?) AND (avgift < ? OR ?);";
- 		$res = getTableForVariables($vars, $sql);
- 		$sortBy = $_POST["sortBy"];
- 	// Check if it is a boolean or string, should be a boolean
- 		$desc = $_POST["desc"];
- 		$res = sortObjects($res, $sortBy, $desc);
- 		return $res;
 	}
 
 	function getTableForVariables($vars, $sql){
@@ -57,73 +65,23 @@
 		    }
 	}
 
-	// Help function to get the papameters sent through the form 
-	function getVarsForForm(){
-		$emptyFields = emptyFields();
-	 	$vars = array(
-	 		$lan = $_POST["lan"],
-	 		$lanEjGivet = $emptyFields[0],
-	 		$objekttyp = $_POST["objekttyp"],
-	 		$objekttypEjGivet = $emptyFields[1],
-	 		$adress = $_POST["adress"],
-	 		$adressEjGivet = $emptyFields[2],
-	 		$minArea = $_POST["minArea"],
-	 		$minAreaEjGiven = $emptyFields[3],
-	 		$maxArea = $_POST["maxArea"],
-	 		$maxAreaEjGiven = $emptyFields[4],
-	 		$minRum = $_POST["minRum"],
-	 		$minRumEjGiven = $emptyFields[5],
-	 		$maxRum = $_POST["maxRum"],
-	 		$maxRumEjGiven = $emptyFields[6],
-	 		$minPris = $_POST["minPris"],
-	 		$minPrisEjGiven = $emptyFields[7],
-	 		$maxPris = $_POST["maxPris"],
-	 		$maxPrisEjGiven = $emptyFields[8],
-	 		$minAvgift = $_POST["minAvgift"],
-	 		$minAvgiftEjGiven = $emptyFields[9],
-	 		$maxAvgift = $_POST["maxAvgift"],
-	 		$maxAvgiftEjGiven = $emptyFields[10],
-	 	);
-	 	return $vars;
+	// MARK: Functions to create the latest search array
+	function getFormSearchFields(){
+		$attributes = array("lan", "objekttyp", "adress", "minArea", "maxArea", "minRum", "maxRum", "minPris", "maxPris", "minAvgift", "maxAvgift");
+		return $attributes;
 	}
 
-	function emptyFields(){
-		$emptyFields = array(false, false, false, false, false, false, false, false, false, false, false);
-		if (empty($_POST["lan"])){
-			$emptyFields[0] = true;
+	function latestSearch(){
+		$attributes = getFormSearchFields();
+		$latestSearch = Array();
+		foreach ($attributes as $value) {
+			if(!empty($_POST[$value])){
+				$latestSearch[$value] = $_POST[$value];
+			}
 		}
-		if (empty($_POST["objekttyp"])){
-			$emptyFields[1] = true;
-		}
-		if (empty($_POST["adress"])){
-			$emptyFields[2] = true;
-		}
-		if (empty($_POST["minArea"])){
-			$emptyFields[3] = true;
-		}
-		if (empty($_POST["maxArea"])){
-			$emptyFields[4] = true;
-		}
-		if (empty($_POST["minRum"])){
-			$emptyFields[5] = true;
-		}
-		if (empty($_POST["maxRum"])){
-			$emptyFields[6] = true;
-		}
-		if (empty($_POST["minPris"])){
-			$emptyFields[7] = true;
-		}
-		if (empty($_POST["maxPris"])){
-			$emptyFields[8] = true;
-		}
-		if (empty($_POST["minAvgift"])){
-			$emptyFields[9] = true;
-		}
-		if (empty($_POST["maxAvgift"])){
-			$emptyFields[10] = true;
-		}
-		return $emptyFields;
+		return $latestSearch;
 	}
+
 
 	// MARK: Functions used for sorting
 
@@ -170,16 +128,16 @@
 	    return strcmp($a->adress, $b->adress);
 	}
 	function cmp4($a, $b){
-	    return strcmp($a->area, $b->area);
+	    return $a->area - $b->area;
 	}
 	function cmp5($a, $b){
-	    return strcmp($a->rum, $b->rum);
+	    return $a->rum - $b->rum;
 	}
 	function cmp6($a, $b){
-	    return strcmp($a->pris, $b->pris);
+	    return $a->pris - $b->pris;
 	}
 	function cmp7($a, $b){
-	    return strcmp($a->avgift, $b->avgift);
+	    return $a->avgift - $b->avgift;
 	}
 
 ?>
